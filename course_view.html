@@ -5,6 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course View - LMS</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script>
+        function changeCourse(id, course) {
+            const courseDiv = course.children[0];
+
+            const courseImg = document.createElement("img");
+            courseImg.src = "course1.jpg";
+            courseImg.alt = "Course 1";
+            const courseCode = document.createElement("p");
+            courseCode.innerHTML = `Course Code: ${id}`;
+            const courseQuiz = document.createElement("a");
+            courseQuiz.href = "attempt_quiz.html";
+            courseQuiz.innerHTML = "Attempt Quiz";
+            
+            courseDiv.replaceChild(courseImg, courseDiv.children[0]);
+            courseDiv.replaceChild(courseCode, courseDiv.children[2]);
+            courseDiv.replaceChild(courseQuiz, courseDiv.children[3]);
+            courseDiv.removeChild(courseDiv.children[4])
+        }
+
+        function accepted(id) {
+            const acceptedCourse = document.getElementById(id);
+            
+            changeCourse(id, acceptedCourse);
+            
+            const enrolledTable = document.getElementsByClassName("cv")[0];
+            const enrolledRow = enrolledTable.lastElementChild.lastElementChild;
+            if (enrolledRow.childElementCount < 3) {
+                enrolledRow.appendChild(acceptedCourse);
+            }
+            else{
+                const newRow = document.createElement("tr");
+                enrolledTable.lastElementChild.appendChild(newRow);
+                newRow.appendChild(acceptedCourse);
+            }
+        }
+
+        function declined(id) {
+            const declinedCourse = document.getElementById(id);
+            const row = declinedCourse.parentElement;
+            row.removeChild(declinedCourse);
+        }
+
+        function changeColour(id) {
+            var course = document.getElementById(id);
+            course.style.backgroundColor = "white";
+        }
+
+        function restoreColour(id) {
+            var course = document.getElementById(id);
+            course.style.backgroundColor = "#e6f2ff"
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -33,7 +85,8 @@
             <hr>
             <table class="cv">
 				<tr>
-					<td>
+					<td id="WD381" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
 						<div>
                             <img src="course1.jpg" alt="Course 1">
                             <p>Course Name: Web Development</p>
@@ -41,7 +94,8 @@
                             <a href="attempt_quiz.html">Attempt Quiz</a>
                         </div>
 					</td>
-					<td>
+					<td id="DS371" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
 						<div>
                             <img src="course1.jpg" alt="Course 1">
                             <p>Course Name: Data Structures</p>
@@ -49,7 +103,8 @@
                             <a href="attempt_quiz.html">Attempt Quiz</a>
                         </div>
 					</td>
-                    <td>
+                    <td id="DB346" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
 						<div>
                             <img src="course1.jpg" alt="Course 1">
                             <p>Course Name: Database Systems</p>
@@ -60,7 +115,8 @@
 				</tr>
 				<!-- Display Course 4 and 5 in the same line -->
 				<tr>
-					<td>
+					<td id="ST484" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
 						<div>
                             <img src="course1.jpg" alt="Course 1">
                             <p>Course Name: Software Testing</p>
@@ -68,7 +124,8 @@
                             <a href="attempt_quiz.html">Attempt Quiz</a>
                         </div>
 					</td>
-					<td>
+					<td id="SA396" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
 						<div>
                             <img src="course1.jpg" alt="Course 1">
                             <p>Course Name: Software Architectures</p>
@@ -91,22 +148,24 @@
             <hr>
             <table class="cv">
 				<tr>
-					<td>
+					<td id="DS102" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
                         <div>
                             <img src="course2.jpg" alt="Course 2">
                             <p>Course Name: Data Science</p>
                             <p>Course Code: DS102</p>
-                            <button class="accept">Accept</button>
-                            <button class="decline">Decline</button>
+                            <button class="accept" onclick="accepted('DS102')">Accept</button>
+                            <button class="decline" onclick="declined('DS102')">Decline</button>
                         </div>
                     </td> 
-                    <td>
+                    <td id="ML105" onmouseover="changeColour(id)"
+                    onmouseout="restoreColour(id)">
                         <div>
                             <img src="course2.jpg" alt="Course 2">
                             <p>Course Name: Machine Learning</p>
                             <p>Course Code: ML105</p>
-                            <button class="accept">Accept</button>
-                            <button class="decline">Decline</button>
+                            <button class="accept" onclick="accepted('ML105')">Accept</button>
+                            <button class="decline" onclick="declined('ML105')">Decline</button>
                         </div>
                     </td> 
                 </tr>
