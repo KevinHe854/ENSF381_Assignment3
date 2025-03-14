@@ -5,6 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attempt Quiz - LMS</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script>
+        var score1 = 0;
+        var score2 = 0;
+        var score;
+        setInterval(countdown, 1000);
+
+        function countdown() {
+            const timer = document.getElementById("timer");
+            var time = timer.textContent;
+            var minutes = Number.parseInt(time.substring(0, 2));
+            var seconds = Number.parseInt(time.substring(3, 5));
+
+            if (seconds == 0) {
+                seconds = 59;
+                minutes--;
+            }
+            else {
+                seconds--;
+            }
+
+            if (minutes == 0 && seconds == 0) {
+                window.location.href = "leaderboard.html"
+            }
+
+            if (seconds < 10) seconds = `0${seconds}`;
+            timer.textContent = `0${minutes}:${seconds}`;
+        }
+
+        function updateScore() {
+            score = score1 + score2;
+            scoreDisplay = document.getElementById("score");
+            scoreDisplay.textContent = `Score: ${score}/100`;
+        }
+
+        function finishedQ1() {
+            const q1 = document.getElementsByName("q1")
+            if (!q1[0].checked && !q1[1].checked) {
+                alert("Q1 not answered");
+            }
+            else if (q1[0].checked == true) {
+                score1 = 50;
+            }
+            else {
+                score1 = 0;
+            }
+
+            updateScore();
+        }
+
+        function finishedQ2() {
+            const q2 = document.getElementsByName("q2");
+            if (!q2[0].checked && !q2[1].checked) {
+                score2 = 0;
+                alert("Q2 not answered");
+            }
+            else if (q2[0].checked && q2[1].checked) {
+                score2 = 50;
+            }
+            else {
+                score2 = 25;
+            }
+
+            updateScore();
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -25,6 +90,8 @@
             <p>Topic: HTML Basics</p>
             <p>Deadline: 11:59 PM, February 10, 2025</p>
             <p>Attempts Allowed: 1</p>
+            <p id="score">Score: 0/100</p>
+            <p id="timer">10:00</p>
         </div>
         
         <h3>Question 1</h3>
@@ -36,7 +103,7 @@
             <label for="q1b">Home Tool Markup Language</label><br>
         </div>
         <br>
-        <button class="ans">Submit Answer</button>
+        <button class="ans" onclick="finishedQ1()">Submit Answer</button>
         
         <h3>Question 2</h3>
         <p>Which of the following are HTML elements? (Select all that apply)</p>
@@ -47,7 +114,7 @@
         <label for="q2b">&lt;span&gt;</label><br>
         </div>
         <br>
-        <button class="ans">Submit Answer</button>
+        <button class="ans" onclick="finishedQ2()">Submit Answer</button>
         
         <br><br>
         <a href="leaderboard.html">
