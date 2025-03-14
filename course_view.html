@@ -6,20 +6,17 @@
     <title>Course View - LMS</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script>
-        function changeCourse(id, course) {
+        function changeCourse(course) {
             const courseDiv = course.children[0];
 
             const courseImg = document.createElement("img");
             courseImg.src = "course1.jpg";
             courseImg.alt = "Course 1";
-            const courseCode = document.createElement("p");
-            courseCode.innerHTML = `Course Code: ${id}`;
             const courseQuiz = document.createElement("a");
             courseQuiz.href = "attempt_quiz.html";
             courseQuiz.innerHTML = "Attempt Quiz";
             
             courseDiv.replaceChild(courseImg, courseDiv.children[0]);
-            courseDiv.replaceChild(courseCode, courseDiv.children[2]);
             courseDiv.replaceChild(courseQuiz, courseDiv.children[3]);
             courseDiv.removeChild(courseDiv.children[4])
         }
@@ -27,7 +24,7 @@
         function accepted(id) {
             const acceptedCourse = document.getElementById(id);
             
-            changeCourse(id, acceptedCourse);
+            changeCourse(acceptedCourse);
             
             const enrolledTable = document.getElementsByClassName("cv")[0];
             const enrolledRow = enrolledTable.lastElementChild.lastElementChild;
@@ -49,7 +46,7 @@
 
         function changeColour(id) {
             var course = document.getElementById(id);
-            course.style.backgroundColor = "white";
+            course.style.backgroundColor = "#ffffff";
         }
 
         function restoreColour(id) {
