@@ -19,23 +19,83 @@
     
     <main class="login">
         <h2>LMS Login</h2>
-        <form>
+        <form id="loginForm">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br><br>
             
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br>
+
         </form> 
         <br>
         <br>  
-            <a href="course_view.html">
-                <button>Login</button>
-            </a><br><br>
+            <button type="button" id="loginButton" onClick="loginFunction()">Login</button>
+            <br><br>
             <a href="#">Forgot Password?</a>
+            <br>
+            <a href="signup.html">Don't have an account? Sign Up</a>
+            <br>
+            <div id="messageBox"></div>
         
     </main>
     <footer>
         <p>&copy; 2025 LMS. All rights reserved.</p>
     </footer>
+
+    <script>
+        function loginFunction(){
+            var usernameInput = document.getElementById("username").value;
+            var passwordInput = document.getElementById("password").value;
+
+            if((usernameInput == "") || (passwordInput == "")){
+                showMessage("Please fill in all fields.", "error");
+                return;
+            }
+
+            fetch("https://jsonplaceholder.typicode.com/users")
+                .then((response)=> {
+                    return response.json();
+                })
+                .then((users)=>{
+                    var foundUser = null;
+
+                    for(var i = 0; i < users.length; i++){
+                        if(users[i].username == usernameInput){
+                            foundUser = users[i];
+                            break;
+                        }
+                    }
+
+                    if(foundUser){
+                        if(passwordInput == foundUser.email){
+                            showMessage("Login successful! Redirecting...", "success");
+
+                            var intervalID = setInterval(function(){
+                                window.location.href = "course_view.html";
+                                clearInterval(intervalID);
+                            }, 2000);
+                        } else {
+                            showMessage("Invalid username or password!", "error");
+                        }
+                    } else {
+                        showMessage("Invalid username or password!", "error");
+                    }
+                })
+                .catch((error)=>{
+                    console.error("Error fetching user data: ", error);
+                    showMessage("An error has occured. Please try again later.", "error")
+                });
+        }
+
+        function showMessage(message, type){
+            var messageBox = document.getElementById("messageBox");
+            messageBox.textContent = message;
+            if(type == "success"){
+                messageBox.className = "successBox";
+            } else {
+                messageBox.className = "errorBox"
+            }
+        }
+    </script>
 </body>
 </html>
