@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LMS</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="logo.jpg" alt="LMS Logo" style="width: 100px; height: 100px;">
+        <h1>LMS - Learning Management System</h1>
+    </header>
+    <div>
+        <nav>
+            <a href="index.html">Homepage</a>
+        </nav>
+    </div>
+
+    <main class="signup">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br><br>
+        
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <br><br>
+        
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <br><br>
+
+            <button type="button" id="signupButton" onclick="signupFunction()">Sign Up</button>
+        </form>
+        <br>
+        <div id="messageBox"></div>
+        <br>
+        <a href="login.html">Already have an account? Login here</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 LMS. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function validateUsername(username){
+            var errors = "";
+            if((username.length < 3) || username.length > 20){
+                errors += "Username must be between 3 and 20 characters long.<br>";
+            }
+
+            var firstChar = username.charAt(0);
+            if(!((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z'))) {
+                errors += "Username must start with a letter.<br>";
+            }
+
+            var allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+            for (var i = 0; i < username.length; i++) {
+                var ch = username.charAt(i);
+            
+                if (allowed.indexOf(ch) == -1) {
+                    errors += "Username may only contain letters, numbers, hyphens, or underscores.<br>";
+                    break;
+                }
+            }
+
+            return errors;
+        }
+
+        function validatePassword(password) {
+            var errors = "";
+            if (password.length < 8) {
+                errors += "Password must be at least 8 characters long.<br>";
+            }
+            
+            var hasUpper = false;
+            var hasLower = false;
+            var hasDigit = false;
+            var hasSpecial = false;
+            var specialChars = "!@#$%^&*()-_=+[]{}|;:'\",.<>/?`~";
+        
+            for (var i = 0; i < password.length; i++) {
+                var ch = password.charAt(i);
+                if (ch >= 'A' && ch <= 'Z') {
+                    hasUpper = true;
+                } else if (ch >= 'a' && ch <= 'z') {
+                    hasLower = true;
+                } else if (ch >= '0' && ch <= '9') {
+                    hasDigit = true;
+                } else if (specialChars.indexOf(ch) !== -1) {
+                    hasSpecial = true;
+                } else if (ch === " ") {
+                    errors += "Password must not contain spaces.<br>";
+                }
+            }
+            
+            if (!hasUpper) {
+                errors += "Password must include at least one uppercase letter.<br>";
+            }
+            if (!hasLower) {
+                errors += "Password must include at least one lowercase letter.<br>";
+            }
+            if (!hasDigit) {
+                errors += "Password must include at least one digit.<br>";
+            }
+            if (!hasSpecial) {
+                errors += "Password must include at least one special character.<br>";
+            }
+            
+            return errors;
+        }
+
+        function validateEmail(email){
+            var errors = "";
+            if(email.indexOf(" ") != -1){
+                errors += "Email must not contain spaces.<br>";
+            }
+
+            var atPosition = email.indexOf('@');
+            if(atPosition <= 0){
+                errors += "Email must contain an '@' symbol that is not the first character.<br>";
+            }
+
+            var domainPart = email.substring(atPosition + 1);
+            if(domainPart.length == 0){
+                errors += "Email must have a domain after '@'.<br>";
+            }
+
+            var dotPosition = domainPart.indexOf(".");
+            if(dotPosition <= 0){
+                errors += "The domain must contain a dot ('.') with text before it.<br>";
+            }
+
+            var validDomains = [".com", ".net", ".io"];
+            var valid = false;
+
+            for(var i = 0; i < validDomains.length; i++){
+                var ending = validDomains[i];
+
+                if(domainPart.substring(domainPart.length - ending.length) == ending){
+                    valid = true;
+                    break;
+                }
+            }
+            
+            if (!valid) {
+                errors += "Email domain must end with .com, .net, or .io.<br>";
+            }
+            
+            return errors;
+        }
+        
+        function signupFunction(){
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var email = document.getElementById("email").value;
+
+            var errorMessages="";
+
+            var usernameErrors = validateUsername(username);
+            if(usernameErrors != ""){
+                errorMessages += "Invalid username:<br>" + usernameErrors;
+            }
+
+            var passwordErrors = validatePassword(password);
+            if (passwordErrors !== "") {
+                errorMessages += "Invalid password:<br>" + passwordErrors;
+            }
+            
+            if (password !== confirmPassword) {
+                errorMessages += "Passwords do not match.<br>";
+            }
+            
+            var emailErrors = validateEmail(email);
+            if (emailErrors !== "") {
+                errorMessages += "Invalid email:<br>" + emailErrors;
+            }
+
+            if (errorMessages !== "") {
+                showMessage(errorMessages, "error");
+            } else {
+                showMessage("Signup successful! Redirecting to Login...", "success");
+                var intervalID = setInterval(function(){
+                    window.location.href = "login.html";
+                    clearInterval(intervalID);
+                }, 2000);
+            }
+        }
+
+        function showMessage(message, type){
+            var messageBox = document.getElementById("messageBox");
+            messageBox.innerHTML = message;
+            if(type == "success"){
+                messageBox.className = "successBox";
+            } else {
+                messageBox.className = "errorBox"
+            }
+        }
+    </script>
+</body>
+</html>
